@@ -1,0 +1,35 @@
+{
+	"geode": ">=4.0.1",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074"
+	},
+	"version": "v1.0.0-alpha.1",
+	"id": "gmp.aquamarine",
+	"name": "Aquamarine",
+	"developer": "GMP",
+	"description": "A Simple Mod Menu",
+	"resources": {
+		"spritesheets": {
+			"AM_Sheet": [
+				"resources/logos/*.png",
+				"resources/*.png"
+			]
+		},
+		"files": [
+			"resources/Fonts/*.ttf"
+		]
+	},
+	"dependencies": [
+		{
+			"id": "geode.node-ids",
+			"version": ">=v1.12.0",
+			"importance": "required"
+		},
+		{
+			"id": "geode.custom-keybinds",
+			"version": ">=1.6.0",
+			"importance": "required"
+		}
+	]
+}
