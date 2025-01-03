@@ -10,7 +10,7 @@
 #include <Geode/modify/EditLevelLayer.hpp> // show / reset
 #include <Geode/modify/CreatorLayer.hpp>
 
-#include "interface/AMLayer.hpp"
+#include "interface/SMLayer.hpp"
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <iostream>
 
@@ -19,7 +19,7 @@ using namespace keybinds;
 
 bool buttonExists = false;
 bool btnEditorMode = false;
-AMLayer* amLayer;
+SMLayer* smLayer;
 
 class $modify(MenuLayer){
     bool init() {
@@ -27,8 +27,8 @@ class $modify(MenuLayer){
 
         if (!Mod::get()->setSavedValue("seen-intro-popup", true)) {
             FLAlertLayer* popup = FLAlertLayer::create(
-                "Aquamarine",
-                "Welcome to Aquamarine!\n<cb>Press The Tab Key Or Press The Button To Continue Your Voyage.</c>",
+                "SpaceMenu",
+                "Welcome to SpaceMenu!\n<cb>Use the Page Down key or press the button.</c>",
                 "OK"
             );
             popup->m_scene = this;
@@ -37,13 +37,13 @@ class $modify(MenuLayer){
 
         if (buttonExists) return true;
 
-        amLayer = AMLayer::create();
-        this->addChild(amLayer);
+        smLayer = SMLayer::create();
+        this->addChild(smLayer);
 
-        amLayer->setVisible(true);
-        amLayer->showButton();
+        smLayer->setVisible(true);
+        smLayer->showButton();
 
-        SceneManager::get()->keepAcrossScenes(amLayer);
+        SceneManager::get()->keepAcrossScenes(smLayer);
 
         buttonExists = true;
 
@@ -53,17 +53,17 @@ class $modify(MenuLayer){
 
 void showButton(bool reset) {
     //if (reset) {
-    //    amLayer->resetButtonPositioning();
+    //    smLayer->resetButtonPositioning();
     //}
-    amLayer->setVisible(false);
-    amLayer->showButton();
+    smLayer->setVisible(false);
+    smLayer->showButton();
     btnEditorMode = false;
 }
 
 class $modify(PlayLayer) {
     bool init(GJGameLevel * level, bool useReplay, bool dontCreateObjects) {
         if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
-        amLayer->hideButton();
+        smLayer->hideButton();
         return true;
     }
 };
@@ -71,14 +71,14 @@ class $modify(PlayLayer) {
 class $modify(PauseLayer) {
     void customSetup() {
         PauseLayer::customSetup();
-        amLayer->showButton();
+        smLayer->showButton();
     }
 };
 
 class $modify(EditLevelLayer) {
     bool init(GJGameLevel * level) {
         if (!EditLevelLayer::init(level)) { return false; }
-        amLayer->hideButton();
+        smLayer->hideButton();
         return true;
     }
 };
@@ -89,19 +89,19 @@ class $modify(EditLevelLayer) {
 
         auto guidelinesMenu = this->getChildByID("guidelines-menu");
 
-        amLayer->setVisible(true);
-        amLayer->showButton();
-        amLayer->setButtonParent(guidelinesMenu);
+        smLayer->setVisible(true);
+        smLayer->showButton();
+        smLayer->setButtonParent(guidelinesMenu);
 
-        CCSprite* sprite = CCSprite::createWithSpriteFrameName("AM_Button.png"_spr);
-        CCMenuItemSpriteExtra* am_button = CCMenuItemSpriteExtra::create(
-            sprite, this, menu_selector(AMLayer::onButton)
+        CCSprite* sprite = CCSprite::createWithSpriteFrameName("SM_Button.png"_spr);
+        CCMenuItemSpriteExtra* sm_button = CCMenuItemSpriteExtra::create(
+            sprite, this, menu_selector(SMLayer::onButton)
         );
 
         float buttonSize = 0.25f;
         sprite->setScale(buttonSize);
         sprite->setAnchorPoint(CCPoint(0.0f, 0.0f));
-        am_button->setContentSize(CCSize(128.0f * buttonSize, 128.0f * buttonSize));
+        sm_button->setContentSize(CCSize(128.0f * buttonSize, 128.0f * buttonSize));
 
         btnEditorMode = true;
 
@@ -115,19 +115,19 @@ $execute{
     using namespace keybinds;
 
     BindManager::get()->registerBindable({
-        "close-aquamarine"_spr,
-        "Close Aquamarine",
+        "close-spacemenu"_spr,
+        "Close SpaceMenu",
         "",
         { Keybind::create(KEY_Escape, Modifier::None) },
-        "Aquamarine/Menu Keybinds"
+        "SpaceMenu/Menu Keybinds"
     });
 
     BindManager::get()->registerBindable({
-        "open-aquamarine"_spr,
-        "Open Aquamarine",
+        "open-spacemenu"_spr,
+        "Open SpaceMenu",
         "",
-        { Keybind::create(KEY_Tab, Modifier::None) },
-        "Aquamarine/Menu Keybinds"
+        { Keybind::create(KEY_PageDown, Modifier::None) },
+        "SpaceMenu/Menu Keybinds"
     });
 }
 #endif

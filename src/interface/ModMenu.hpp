@@ -9,10 +9,10 @@ using namespace geode::prelude;
 using namespace std;
 using namespace keybinds;
 
-class Aquamarine : public CCLayer {
+class SpaceMenu : public CCLayer {
 public:
     virtual bool init();
-    static Aquamarine* create();
+    static SpaceMenu* create();
     void show();
     void hide(CCObject*);
     bool visible = false;
@@ -22,14 +22,14 @@ private:
     CCScale9Sprite* background;
     void showNoAnim();
     void openAnim();
-    Aquamarine* meImCool;
+    SpaceMenu* meImCool;
     CCLayerColor* backgroundFade;
     template<typename T>
     CCNode* loadMod(CCMenu* menu, bool makeNewMenu = true); // false is broken
     void onModToggle(CCObject* sender);
 };
 
-bool Aquamarine::init() {
+bool SpaceMenu::init() {
     if (!CCLayer::init()) {
         return false;
     }
@@ -44,7 +44,7 @@ bool Aquamarine::init() {
 
     background = CCScale9Sprite::create("GJ_square02.png");
     background->setContentSize(panelSize);
-    background->setID("am-background");
+    background->setID("sm-background");
 
     auto bgMenu = CCMenu::create();
     background->addChild(bgMenu);
@@ -54,7 +54,7 @@ bool Aquamarine::init() {
 
     CCSprite* closeBtnSprite = CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png");
     CCMenuItemSpriteExtra* closeBtn = CCMenuItemSpriteExtra::create(
-        closeBtnSprite, bgMenu, menu_selector(Aquamarine::onCloseButton)
+        closeBtnSprite, bgMenu, menu_selector(SpaceMenu::onCloseButton)
     );
     closeBtn->setAnchorPoint(CCPoint(0.5f, 0.5f));
     closeBtn->setPositionX(-(panelSize.x / 2) - 20.6f);
@@ -66,10 +66,10 @@ bool Aquamarine::init() {
     creatorInfoContainer->setContentSize(CCSize(0.0f, 0.0f));
     creatorInfoContainer->setScale(0.525);
 
-    auto fullLogoSprite = CCSprite::createWithSpriteFrameName("AM_FullLogo.png"_spr);
+    auto fullLogoSprite = CCSprite::createWithSpriteFrameName("SM_FullLogo.png"_spr);
     fullLogoSprite->setAnchorPoint(CCPoint(1.0f, 1.0f));
 
-    auto creatorLabel = CCLabelBMFont::create("made by GMDPLUTONIC", "LobsterTwo-Italic.ttf"_spr);
+    auto creatorLabel = CCLabelBMFont::create("made by bigmancozmo", "Montserrat-Medium.fnt"_spr);
     auto creatorLabelY = fullLogoSprite->getPositionY() - fullLogoSprite->getContentHeight() * fullLogoSprite->getScaleY();
     creatorLabel->setPositionY(creatorLabelY + 8.0f);
     creatorLabel->setPositionX(fullLogoSprite->getPositionX() - 8.0f);
@@ -130,7 +130,7 @@ bool Aquamarine::init() {
         }
         return ListenerResult::Propagate;
 
-    }, "close-aquamarine"_spr);
+    }, "close-spacemenu"_spr);
 #endif
 
     this->openAnim();
@@ -138,13 +138,13 @@ bool Aquamarine::init() {
     return true;
 }
 
-Aquamarine* Aquamarine::create() {
-    Aquamarine* me = new Aquamarine();
+SpaceMenu* SpaceMenu::create() {
+    SpaceMenu* me = new SpaceMenu();
     me->init();
     return me;
 }
 
-void Aquamarine::openAnim()
+void SpaceMenu::openAnim()
 {
     background->setPosition(CCPoint(0, screenSize.height));
     auto moveToAction = CCMoveTo::create(1, CCPoint(0, 0));
@@ -159,19 +159,19 @@ void Aquamarine::openAnim()
 #endif
 }
 
-void Aquamarine::onCloseButton(CCObject* sender)
+void SpaceMenu::onCloseButton(CCObject* sender)
 {
-    InvokeBindEvent("close-aquamarine"_spr, true).post();
+    InvokeBindEvent("close-spacemenu"_spr, true).post();
 }
 
-void Aquamarine::onModToggle(CCObject* sender)
+void SpaceMenu::onModToggle(CCObject* sender)
 {
     auto hackKey = static_cast<CCMenuItemToggle*>(sender)->getID();
     Hacks::setEnabled(hackKey, !(Hacks::isEnabled(hackKey)));
 }
 
 template<typename T>
-CCNode* Aquamarine::loadMod(CCMenu* menu, bool makeNewMenu)
+CCNode* SpaceMenu::loadMod(CCMenu* menu, bool makeNewMenu)
 {
     CCLayer* hackLayer = CCLayer::create();
     CCMenu* layerMenu;
@@ -186,7 +186,7 @@ CCNode* Aquamarine::loadMod(CCMenu* menu, bool makeNewMenu)
         innerLayer = CCLayer::create();
     }
     
-    auto toggler = CCMenuItemToggler::createWithStandardSprites(makeNewMenu ? layerMenu : menu, menu_selector(Aquamarine::onModToggle), 1.0f);
+    auto toggler = CCMenuItemToggler::createWithStandardSprites(makeNewMenu ? layerMenu : menu, menu_selector(SpaceMenu::onModToggle), 1.0f);
     toggler->setAnchorPoint(CCPoint(0.5f, 0.5f));
     
     toggler->setID(T::hackKey);
@@ -200,7 +200,7 @@ CCNode* Aquamarine::loadMod(CCMenu* menu, bool makeNewMenu)
     (makeNewMenu ? layerMenu : innerLayer)->addChild(toggler);
 
     if (Hacks::isEnabled(T::hackKey)) {
-        Aquamarine::onModToggle(static_cast<CCObject*>(toggler)); // fake a button press
+        SpaceMenu::onModToggle(static_cast<CCObject*>(toggler)); // fake a button press
         toggler->activate();
     }
 
@@ -216,7 +216,7 @@ CCNode* Aquamarine::loadMod(CCMenu* menu, bool makeNewMenu)
     return hackLayer;
 }
 
-void Aquamarine::show()
+void SpaceMenu::show()
 {
     visible = true;
     auto touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
@@ -230,7 +230,7 @@ void Aquamarine::show()
     this->openAnim();
 }
 
-void Aquamarine::showNoAnim()
+void SpaceMenu::showNoAnim()
 {
     visible = true;
     auto touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
@@ -242,7 +242,7 @@ void Aquamarine::showNoAnim()
     touchDispatcher->setForcePrio(touchDispatcher->getForcePrio() - 25);
 }
 
-void Aquamarine::hide(CCObject*)
+void SpaceMenu::hide(CCObject*)
 {
     visible = false;
     this->setVisible(false);
