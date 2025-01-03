@@ -26,7 +26,7 @@ class $modify(MenuLayer){
         if (!MenuLayer::init()) return false;
 
         if (!Mod::get()->setSavedValue("seen-intro-popup", true)) {
-            FLAlertLayer* popup = FLAlertLayer::create()
+            FLAlertLayer* popup = FLAlertLayer::create();
                 "Aquamarine",
                 "Welcome to Aquamarine!\n<cb>Press The Tab Key Or Press The Button To Continue Your Voyage.</c>",
                 "OK
