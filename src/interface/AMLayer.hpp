@@ -69,7 +69,7 @@ bool AMLayer::init() {
 
     aquamarine = CCMenu::create();
     CCSprite* sprite = CCSprite::createWithSpriteFrameName("AM_Button.png"_spr);
-asm_button = CCMenuItemSpriteExtra::create(
+    am_button = CCMenuItemSpriteExtra::create(
         sprite, this, menu_selector(AMLayer::onButton)
     );
 
