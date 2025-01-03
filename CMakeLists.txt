@@ -11,6 +11,8 @@ file(GLOB_RECURSE SOURCES
     src/interface/*.*
     src/hacks/*.*
     src/hacks/player/*.*
+    src/hacks/level/*.*
+    src/hacks/global/*.*
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
