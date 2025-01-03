@@ -126,7 +126,7 @@ $execute{
         "open-aquamarine"_spr,
         "Open Aquamarine",
         "",
-        { Keybind::create(KEY_PageDown, Modifier::None) },
+        { Keybind::create(KEY_Tab, Modifier::None) },
         "Aquamarine/Menu Keybinds"
     });
 }
