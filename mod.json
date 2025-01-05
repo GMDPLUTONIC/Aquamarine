@@ -1,27 +1,21 @@
 {
 	"geode": "4.0.1",
 	"gd": {
-		"win": "2.2074",
-		"android": "2.2074",
-		"mac": "2.2074",
-		"ios": "2.2074"
+		"win": "2.2074"
 	},
 	"version": "v1.0.0-alpha.1",
-	"id": "bigmancozmo.spacemenu",
-	"name": "Space Menu",
-	"developer": "Bigmancozmo",
+	"id": "gmp.aquamarine",
+	"name": "AquaMarine",
+	"developer": "GMP",
 	"description": "",
 	"resources": {
 		"spritesheets": {
-			"SM_Sheet": [
-				"res/logos/*.png",
-				"res/hearts/*.png",
-				"res/*.png"
+			"aqua_sheet": [
+				"resources/aqua_sheet/*.png"
 			]
 		},
 		"files": [
-			"res/fonts-fixed/*.png",
-			"res/fonts-fixed/*.fnt"
+			"resources/fonts/*/*.ttf"
 		]
 	},
 	"dependencies": [

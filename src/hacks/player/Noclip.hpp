@@ -1,23 +1,31 @@
 #pragma once
 
-#include <Geode/Geode.hpp>
-#include <iostream>
-#include "../HackTemplate.hpp"
-#include "../HackManager.hpp"
+#include "../AquaHacks.hpp"
 
-using namespace geode::prelude;
+// Refactored NoclipMod class definition
+class NoclipMod : public aquamarine::mods::Mod {
+private:
+    // Configuration states
+    bool noclip = false;      // Global noclip toggle
+    bool player1 = true;      // Player 1 noclip state
+    bool player2 = true;      // Player 2 noclip state
+    bool allPassable = false; // Global passable state
 
-class Noclip : public Hack {
 public:
-	inline static std::string name = "Noclip";
-	inline static std::string description = "Allows the player to clip through blocks and spikes.";
-	inline static std::string hackKey = "noclip-hack";
+    // Lifecycle methods
+    void init() override;           // Initialize mod settings and UI
+    void update(float dt) override; // Update loop (optional functionality)
 
-	inline static void setEnabled(bool enabled) {
-		Hacks::setEnabled(hackKey, enabled);
-	}
-	inline static void loadValue() {
-		cout << Mod::get()->getSavedValue<bool>(hackKey) << endl;
-		Hacks::setEnabled(hackKey, Mod::get()->getSavedValue<bool>(hackKey));
-	}
+    // Identification methods
+    std::string getId() const override; // Unique mod identifier
+    std::string getTab() const override; // Associated UI tab
+
+    // Event handlers
+    void onNoclip(bool toggled);    // Handle noclip state changes
+    void onPlayer1(bool toggled);   // Handle Player 1 noclip toggle
+    void onPlayer2(bool toggled);   // Handle Player 2 noclip toggle
+    void onPassable(bool toggled);  // Handle passable state toggle
 };
+
+// Macro for registering the mod
+REGISTER_MOD(new NoclipMod());
