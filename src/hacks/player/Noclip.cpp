@@ -2,42 +2,79 @@
 #include "../../Aquamarine.hpp"
 #include "Noclip.hpp"
 
-// Helper to simplify setting and getting configuration values
-template <typename T>
-T setupConfig(const std::string& key, T defaultValue) {
-    aquamarine::Config::setValueIfUnset<T>(key, defaultValue);
-    return aquamarine::Config::getValue<T>(key, defaultValue);
-}
-
-// Helper to create and register UI widgets
-void createToggleWidget(const std::string& id, const std::string& label, const std::string& description, 
-                        const std::string& tab, bool* value, const std::function<void(bool)>& callback) {
-    auto widget = aquamarine::ui::widgets::Widget::create(id)
-        ->addToggle(id, callback, value)
-        ->setLabel(label)
-        ->setDescription(description)
-        ->setTab(tab);
-    aquamarine::ui::registerWidget(widget);
-}
-
 void NoclipMod::init() {
-    // Initialize configuration values
-    noclip = setupConfig<bool>("player.noclip.enabled", false);
-    player1 = setupConfig<bool>("player.noclip.player1", true);
-    player2 = setupConfig<bool>("player.noclip.player2", true);
-    allPassable = setupConfig<bool>("player.noclip.passable", true);
+    aquamarine::Config::setValueIfUnset<bool>("player.noclip.enabled", false);
+    noclip = aquamarine::Config::getValue<bool>("player.noclip.enabled", false);
 
-    // Register widgets
-    createToggleWidget("player.noclip.toggle", "Noclip", "Makes The Player Basically Indestructable.", 
-                       "Player", &noclip, [this](bool toggled) { onNoclip(toggled); });
+    aquamarine::Config::setValueIfUnset<bool>("player.noclip.player1", true);
+    player1 = aquamarine::Config::getValue<bool>("player.noclip.player1", true);
 
-    createToggleWidget("player.noclip.passable", "All Passable", "Makes Every Object With A Hitbox Passable.", 
-                       "Player", &allPassable, [this](bool toggled) { onPassable(toggled); });
+    aquamarine::Config::setValueIfUnset<bool>("player.noclip.player2", true);
+    player2 = aquamarine::Config::getValue<bool>("player.noclip.player2", true);
+
+    aquamarine::Config::setValueIfUnset<bool>("player.noclip.passable", true);
+    allPassable = aquamarine::Config::getValue<bool>("player.noclip.passable", true);
+
+    auto widget = aquamarine::ui::widgets::Widget::create("player.noclip")
+        ->addToggle("player.noclip.toggle", [this](bool toggled) {
+            onNoclip(toggled);
+        }, &noclip)
+        ->setLabel("Noclip")
+        ->setDescription("Prevents you from dying.")
+        ->setTab("Player");
+    aquamarine::ui::registerWidget(widget);
+
+    auto widget4 = aquamarine::ui::widgets::Widget::create("player.passable")
+        ->addToggle("player.noclip.passable", [this](bool toggled) {
+            onPassable(toggled);
+        }, &allPassable)
+        ->setLabel("All Passable")
+        ->setDescription("Makes all objects passable.")
+        ->setTab("Player");
+    aquamarine::ui::registerWidget(widget4);
 }
 
 void NoclipMod::update(float dt) {
-    // Optional update logic for the noclip mod
+    
 }
+
+// void NoclipMod::renderImGui() {
+//     ImGui::Checkbox("Noclip", &noclip);
+//     if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+//     {
+//         ImGui::SetTooltip("Prevents you from dying.");
+//     }
+//     ImGui::SameLine(ImGui::GetWindowWidth() - 35);
+//     ImGui::SetNextItemWidth(100);
+//     if (ImGui::Button(" > ")) ImGui::OpenPopup("Noclip");
+//         if (ImGui::BeginPopup("Noclip")) {
+//         ImGui::Checkbox("Player 1", &player1);
+//         if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+//         {
+//             ImGui::SetTooltip("Prevents player 1 from dying.");
+//         }
+//         if (lastPlayer1 != player1) {
+//             lastPlayer1 = player1;
+//             aquamarine::Config::setValue<bool>("player.noclip.player1", player1);
+//         }
+            
+//         ImGui::Checkbox("Player 2", &player2);
+//         if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+//         {
+//             ImGui::SetTooltip("Prevents player 2 from dying.");
+//         }
+//         if (lastPlayer2 != player2) {
+//             lastPlayer2 = player2;
+//             aquamarine::Config::setValue<bool>("player.noclip.player2", player2);
+//         }
+
+//         ImGui::EndPopup();
+//     }
+//     if (lastNoclip != noclip) {
+//         lastNoclip = noclip;
+//         onNoclip(noclip);
+//     }
+// }
 
 std::string NoclipMod::getId() const {
     return "player.noclip";
@@ -63,23 +100,20 @@ void NoclipMod::onPassable(bool toggled) {
     aquamarine::Config::setValue<bool>("player.noclip.passable", toggled);
 }
 
-// Modifications to PlayLayer
 #include <Geode/modify/PlayLayer.hpp>
 class $modify (PlayLayer) {
-    void destroyPlayer(PlayerObject* player, GameObject* obj) {
+    void destroyPlayer(PlayerObject *player, GameObject *obj) {
         if (!aquamarine::Config::getValue<bool>("player.noclip.enabled", false) || obj == m_anticheatSpike) {
             PlayLayer::destroyPlayer(player, obj);
             return;
         }
-        if ((m_player1 == player && !aquamarine::Config::getValue<bool>("player.noclip.player1", false)) ||
-            (m_player2 == player && !aquamarine::Config::getValue<bool>("player.noclip.player2", false))) {
+        if ((m_player1 == player && !aquamarine::Config::getValue<bool>("player.noclip.player1", false)) || (m_player2 == player && !aquamarine::Config::getValue<bool>("player.noclip.player2", false))) {
             PlayLayer::destroyPlayer(player, obj);
             return;
         }
     }
 };
 
-// Modifications to GameObject
 #include <Geode/modify/GameObject.hpp>
 class $modify (PassGameObject, GameObject) {
     void customSetup() {
