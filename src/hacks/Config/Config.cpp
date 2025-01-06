@@ -9,7 +9,7 @@ void ConfigMods::init() {
     showBall = aquamarine::Config::getValue<bool>("config.showball", false);
 
     aquamarine::Config::setValueIfUnset<float>("config.uiscale", 1.f);
-    uiScale = aquamarinerine::Config::getValue<float>("config.uiscale", 1.f);
+    uiScale = aquamarine::Config::getValue<float>("config.uiscale", 1.f);
     aquamarine::ui::setUIScale(uiScale);
 
     aquamarine::Config::setValueIfUnset<std::string>("config.font", "Carme");
