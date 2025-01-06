@@ -4,15 +4,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+    message(STATUS "Building on linux, disabling SSE and using builtin offsetof")
+    add_definitions(-D_CRT_USE_BUILTIN_OFFSETOF -DIMGUI_DISABLE_SSE)
+endif()
+
+if (DEFINED ENV{GITHUB_ACTIONS})
+    message("Github Actions Build")
+    add_definitions(-DGITHUB_ACTIONS)
+endif()
+
+if (DEFINED ENV{RELEASE_BUILD})
+    message("Building for release!")
+    add_definitions(-DRELEASE_BUILD)
+else()
+    message("Building for debug!")
+    add_definitions(-DDEBUG_BUILD)
+endif()
+
 project(Aquamarine VERSION 1.0.0)
 
 file(GLOB_RECURSE SOURCES
-	src/*.*
-    src/interface/*.*
-    src/hacks/*.*
-    src/hacks/player/*.*
-    src/hacks/level/*.*
-    src/hacks/global/*.*
+    src/*.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
@@ -25,5 +38,8 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-setup_geode_mod(${PROJECT_NAME})
+CPMAddPackage("gh:matcool/gd-imgui-cocos#0207a36") # specify a commit!
 
+target_link_libraries(${PROJECT_NAME} imgui-cocos)
+
+setup_geode_mod(${PROJECT_NAME})
