@@ -21,7 +21,6 @@ void ConfigMods::init() {
         aquamarine::ui::imgui::setFont(currentFont, currentFontStyle);
     });
 
-    #ifndef GEODE_IS_ANDROID
     auto widget = aquamarine::ui::widgets::Widget::create("config.showball")
         ->addToggle("config.showball.toggle", [this](bool toggled) {
             onShowBall(toggled);
@@ -30,7 +29,6 @@ void ConfigMods::init() {
         ->setDescription("Show the ball to open the menu.")
         ->setTab("Config");
     aquamarine::ui::registerWidget(widget);
-    #endif
 
     auto widget2 = aquamarine::ui::widgets::Widget::create("config.uiscale")
         ->addFloatInput("config.uiscale.input", [this](float value) {
