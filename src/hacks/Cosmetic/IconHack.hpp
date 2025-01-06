@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Mods.hpp"
+#include "../AquaHacks.hpp"
 
 // IconHackMod class definition
 class IconHackMod : public aquamarine::mods::Mod {
