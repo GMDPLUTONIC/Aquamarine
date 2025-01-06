@@ -108,13 +108,12 @@ void AquaBall::onPress() {
 }
 
 void AquaBall::update(float dt) {
-  #ifndef GEODE_IS_ANDROID
+
   if (aquamarine::Config::getValue<bool>("config.showball", false)) {
     setVisible(true);
   } else {
     setVisible(false);
   }
-  #endif
 }
 
 } // namespace aquamarine::cocosui
@@ -132,7 +131,7 @@ class $modify(MenuLayer){
     if (!firstML && aquamarine::Config::getValue<bool>("shownAlphaMessage", false) == false && Mod::get()->getVersion().getTag()->value == VersionTag::Alpha) {
       firstML = true;
       queueInMainThread([this]() {
-        geode::createQuickPopup("Aquamarine", "Aquamarine Is Fairly New And Has Lots Of Bugs.", "Ok", "Do not show again", [this](auto, bool dontShow) {
+        geode::createQuickPopup("Aquamarine", "Aquamarine Is Fairly New And Has Lots Of Bugs.", "Close", "Do not show again", [this](auto, bool dontShow) {
         if (dontShow) aquamarine::Config::setValue<bool>("shownAlphaMessage", true);
       });
       });
