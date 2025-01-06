@@ -40,6 +40,6 @@ namespace aquamarine::mods {
     REGISTER_TAB("Player");
     REGISTER_TAB("Cosmetic")
     REGISTER_TAB("Bypass");
-    REGISTER_TAB("Config");
+    REGISTER_TAB("Interface");
     REGISTER_TAB("Shortcuts");
 }

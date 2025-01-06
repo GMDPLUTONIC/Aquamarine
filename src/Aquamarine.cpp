@@ -1,4 +1,4 @@
-// #include "mods/AquaHacks.hpp"
+// #include "Hacks/AquaHacks.hpp"
 #include "Aquamarine.hpp"
 
 namespace aquamarine {
