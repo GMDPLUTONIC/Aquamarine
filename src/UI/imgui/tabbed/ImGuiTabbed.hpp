@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../UIManager.hpp"
+#include "../../UI.hpp"
 #include <imgui-cocos.hpp>
 
 namespace aquamarine::ui::imgui::tabbed {

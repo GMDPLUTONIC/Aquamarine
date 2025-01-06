@@ -1,6 +1,6 @@
 #include <imgui-cocos.hpp>
 #include "Widget.hpp"
-#include "../UIManager.hpp"
+#include "../UI.hpp"
 #include "../imgui/FontManager.hpp"
 
 namespace aquamarine::ui::widgets
