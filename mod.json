@@ -12,12 +12,6 @@
 		"sprites": [
 				"resources/Aqua_Button.png"
 			],
-
-		"spritesheets": {
-			"aqua_sheet": [
-				"resources/aqua_sheet/*.png"
-			]
-		},
 		"files": [
 			"resources/fonts/*/*.ttf"
 		]
